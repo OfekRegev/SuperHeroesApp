@@ -4,12 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.ofek.superheroes.R
 import com.ofek.superheroes.SuperheroesApp
 import com.ofek.superheroes.searchscreen.network.SearchScreenRepository
-import com.ofek.superheroes.uimodels.models.UiSuperHeroModel
-import com.ofek.superheroes.uimodels.models.mapSuperHeroDtoToUiHeroModel
+import com.ofek.superheroes.searchscreen.ui.models.SearchScreenSuperHeroModel
+import com.ofek.superheroes.searchscreen.ui.models.mapSuperHeroDtoToUiHeroModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -35,9 +34,9 @@ class SearchScreenViewModel @Inject constructor(
 
     private val queryReducer: PublishSubject<String> = PublishSubject.create()
     private val compositeDisposable = CompositeDisposable()
-    private val heroesListLiveData = MutableLiveData<List<UiSuperHeroModel>>(emptyList())
+    private val heroesListLiveData = MutableLiveData<List<SearchScreenSuperHeroModel>>(emptyList())
     private val isHeroesListLoadingLiveData = MutableLiveData(false)
-    private val suggestedHeroesListLiveData = MutableLiveData<List<UiSuperHeroModel>>(emptyList())
+    private val suggestedHeroesListLiveData = MutableLiveData<List<SearchScreenSuperHeroModel>>(emptyList())
     private val isSuggestedHeroListLoadingLiveData = MutableLiveData(false)
 
 
@@ -46,6 +45,9 @@ class SearchScreenViewModel @Inject constructor(
         queryReducer.filter { it.length >= minimum_letters_for_query }
             .debounce(debounce_frequency, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                compositeDisposable.add(it)
+            }
             .subscribe {
                 fetchSuperheroes(it)
             }
@@ -98,13 +100,17 @@ class SearchScreenViewModel @Inject constructor(
         queryReducer.onNext(query)
     }
 
-    fun getSearchItems(): LiveData<List<UiSuperHeroModel>> {
+    fun getSearchItems(): LiveData<List<SearchScreenSuperHeroModel>> {
         return heroesListLiveData
     }
 
-    fun getSuggestedItems(): LiveData<List<UiSuperHeroModel>> {
+    fun getSuggestedItems(): LiveData<List<SearchScreenSuperHeroModel>> {
         return suggestedHeroesListLiveData
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
+    }
 
 }

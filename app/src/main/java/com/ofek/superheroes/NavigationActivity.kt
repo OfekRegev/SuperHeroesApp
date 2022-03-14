@@ -4,5 +4,5 @@ import androidx.fragment.app.Fragment
 
 interface NavigationActivity {
 
-    fun navigateToFragment(fragment: Fragment,addToBackStack: Boolean)
+    fun navigateToFragment(fragment: Fragment, root: Boolean)
 }

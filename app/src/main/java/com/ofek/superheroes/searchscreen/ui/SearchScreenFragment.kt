@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ofek.superheroes.NavigationActivity
 import com.ofek.superheroes.databinding.FragmentSearchScreenLayoutBinding
+import com.ofek.superheroes.herodetailsscreen.ui.HeroDetailsScreenFragment
+import com.ofek.superheroes.herodetailsscreen.ui.models.DetailsScreenSuperheroModel
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -48,10 +50,20 @@ class SearchScreenFragment : Fragment() {
         }
         val adapter = HeroesAdapter(
             viewModel.picasso,
-        ) {
-            activity?.let {
-                if (it is NavigationActivity) {
+        ) { hero ->
+            activity?.let { activity ->
+                if (activity is NavigationActivity) {
                     // navigate to hero details
+                    activity.navigateToFragment(
+                        HeroDetailsScreenFragment.newInstance(
+                            DetailsScreenSuperheroModel(
+                                hero.id,
+                                hero.name,
+                                hero.imageUrl,
+                                hero.aliases,
+                            )
+                        ), false
+                    )
                 }
             }
         }

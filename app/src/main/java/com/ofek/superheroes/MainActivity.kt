@@ -16,11 +16,11 @@ class MainActivity : AppCompatActivity(), NavigationActivity {
         navigateToFragment(SearchScreenFragment.newInstance(), true)
     }
 
-    override fun navigateToFragment(fragment: Fragment, addToBackStack: Boolean) {
+    override fun navigateToFragment(fragment: Fragment, root: Boolean) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .apply {
-                if (addToBackStack) {
+                if (root.not()) {
                     addToBackStack(fragment.javaClass.name)
                 }
             }.commit()

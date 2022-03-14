@@ -6,16 +6,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ofek.superheroes.R
 import com.ofek.superheroes.databinding.HeroListViewItemLayoutBinding
 import com.ofek.superheroes.databinding.TitleViewItemLayoutBinding
-import com.ofek.superheroes.uimodels.models.UiSuperHeroModel
+import com.ofek.superheroes.searchscreen.ui.models.SearchScreenSuperHeroModel
 import com.squareup.picasso.Picasso
 
 class HeroesAdapter(
     private val picasso: Picasso,
-    private val onHeroClicked: (UiSuperHeroModel) -> Unit
+    private val onHeroClicked: (SearchScreenSuperHeroModel) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var suggestedItems = emptyList<UiSuperHeroModel>()
-    private var searchItems = emptyList<UiSuperHeroModel>()
+    private var suggestedItems = emptyList<SearchScreenSuperHeroModel>()
+    private var searchItems = emptyList<SearchScreenSuperHeroModel>()
 
 
     companion object {
@@ -109,12 +109,12 @@ class HeroesAdapter(
         return suggestedSize + searchSize
     }
 
-    fun setSearchItems(searchItems: List<UiSuperHeroModel>) {
+    fun setSearchItems(searchItems: List<SearchScreenSuperHeroModel>) {
         this.searchItems = searchItems
         notifyDataSetChanged()
     }
 
-    fun setSuggestedItems(suggestedItems: List<UiSuperHeroModel>) {
+    fun setSuggestedItems(suggestedItems: List<SearchScreenSuperHeroModel>) {
         val currentSuggestedItemsSize = suggestedItems.size
         this.suggestedItems = suggestedItems
         notifyItemRangeChanged(0, currentSuggestedItemsSize + 1)
@@ -140,7 +140,7 @@ class HeroViewHolder(
         }
     }
 
-    fun setHeroData(heroModel: UiSuperHeroModel, onHeroClicked: () -> Unit) {
+    fun setHeroData(heroModel: SearchScreenSuperHeroModel, onHeroClicked: () -> Unit) {
         if (heroModel.imageUrl.isNullOrBlank()) {
             // set placeholder image...
         } else {
