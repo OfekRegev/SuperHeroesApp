@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">SuperHeroes</string>
+    <string name="suggested_title">Suggested</string>
+    <string name="searched_title">Searched Items</string>
+</resources>
